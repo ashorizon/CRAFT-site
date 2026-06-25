@@ -187,56 +187,90 @@
     </section>
 
     <section>
-      <h2>Method Overview</h2>
-      <img class="figure" src="assets/pipeline.png" alt="CRAFT method overview" />
-      <p>
-        CRAFT uses a frozen simulator to generate what-if rollouts, converts discovered failures into preference supervision,
-        and trains CPE to score behaviors under complete scene context.
-      </p>
-    </section>
+    <h2>Method Overview</h2>
 
-    <section>
-      <h2>Training Strategy</h2>
+    <p>
+      CRAFT closes the gap between ego-centric local observations and globally observable
+      closed-loop simulation through two complementary stages: contextual preference learning
+      during training and plug-in test-time alignment during inference.
+    </p>
+
+    <div class="method-block">
+      <div class="method-kicker">Stage 1</div>
+      <h3>Training Strategy: Contextual Preference Learning</h3>
+
+      <img
+        class="method-figure"
+        src="assets/pipeline.png"
+        alt="CRAFT training pipeline"
+      />
+
+      <p>
+        CRAFT keeps the base traffic simulator frozen and uses its closed-loop rollouts to
+        discover simulator-induced failures. These failures are converted into preference
+        supervision under complete scene context, enabling the Contextual Preference Evaluator
+        (CPE) to learn which candidate behaviors are more rational, safe, and rule-compliant.
+      </p>
+
       <div class="info-box">
         <ol class="compact-list">
-          <li><strong>What-if rollout:</strong> generate diverse closed-loop rollouts from logged initial scenes.</li>
-          <li><strong>Failure discovery:</strong> detect abnormal stops, collisions, off-road events, and traffic violations.</li>
-          <li><strong>Preference construction:</strong> compare better and worse rollouts under the same scene context.</li>
-          <li><strong>CPE training:</strong> learn dense contextual preference scores for candidate behaviors.</li>
+          <li>
+            <strong>What-if rollout:</strong> generate diverse closed-loop rollouts from logged
+            initial scenes.
+          </li>
+          <li>
+            <strong>Failure discovery:</strong> detect abnormal stops, collisions, off-road
+            events, and traffic violations.
+          </li>
+          <li>
+            <strong>Preference construction:</strong> compare better and worse rollouts under
+            the same global scene context.
+          </li>
+          <li>
+            <strong>CPE training:</strong> learn dense contextual preference scores for
+            candidate behaviors.
+          </li>
         </ol>
       </div>
-    </section>
+    </div>
 
-    <section>
-      <h2>Inference Strategy</h2>
-      <img class="figure" src="assets/inference_pipeline.png" alt="CRAFT inference pipeline" />
+    <div class="method-block">
+      <div class="method-kicker">Stage 2</div>
+      <h3>Inference Strategy: Plug-in Test-Time Alignment</h3>
+
+      <img
+        class="method-figure"
+        src="assets/inference_pipeline.png"
+        alt="CRAFT inference pipeline"
+      />
+
       <p>
-        During inference, CPE evaluates Top-K candidate actions with one-step lookahead and reweights the base simulator
-        probabilities before sampling.
+        At test time, CPE evaluates candidate actions under one-step lookahead scenes and
+        reweights the frozen simulator distribution. This provides contextual guidance without
+        retraining or modifying the base traffic simulator.
       </p>
 
       <div class="info-box">
         <ol class="compact-list">
           <li>Extract Top-K candidate actions from the base simulator.</li>
-          <li>Construct lookahead scenes for each candidate.</li>
-          <li>Use CPE to score candidate behaviors.</li>
-          <li>Reweight priors with CPE scores and sample the final action.</li>
+          <li>Construct one-step lookahead scenes for each candidate.</li>
+          <li>Use CPE to estimate contextual preference scores.</li>
+          <li>Reweight base probabilities and sample the final action.</li>
         </ol>
 
         <p class="formula">
           <strong>Guidance:</strong>
-          P<sup>post</sup><sub>i,t,k</sub> ∝ P<sup>prior</sup><sub>i,t,k</sub> · exp(β · R<sub>t</sub><sup>(k)</sup>)
+          P<sup>post</sup><sub>i,t,k</sub> ∝
+          P<sup>prior</sup><sub>i,t,k</sub> ·
+          exp(β · R<sub>t</sub><sup>(k)</sup>)
         </p>
       </div>
-    </section>
+    </div>
+  </section>
+
 
     <section>
       <h2>Qualitative Results</h2>
-      <img class="figure" src="assets/visual.png" alt="Qualitative comparison between baseline and CRAFT" />
-      <p>
-        CRAFT reduces traffic-rule violations and abnormal stopping compared with the baseline.
-      </p>
-
       <div class="video-grid">
         <div class="video-card">
           <video controls preload="metadata" poster="assets/poster_rule.jpg">
@@ -293,175 +327,215 @@
     </section>
 
     <section>
-      <h2>Main Quantitative Results</h2>
-      <p>
-        Lower values indicate better behavioral realism, safety, and rule compliance.
-      </p>
+    <h2>Main Quantitative Results</h2>
 
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>Base Model</th>
-              <th>Strategy</th>
-              <th>Reference</th>
-              <th>Spd. JSD ↓</th>
-              <th>Ang. JSD ↓</th>
-              <th>Dist. JSD ↓</th>
-              <th>Collision P-Ag. ↓</th>
-              <th>Collision P-Sc. ↓</th>
-              <th>Offroad P-Ag. ↓</th>
-              <th>Offroad P-Sc. ↓</th>
-              <th>Traffic P-Sc. ↓</th>
-            </tr>
-          </thead>
+    <p>
+      Lower values indicate better behavioral realism, safety, and rule compliance.
+    </p>
 
-          <tbody>
-            <tr>
-              <td>Log</td>
-              <td>Log replay</td>
-              <td>--</td>
-              <td>0.00</td>
-              <td>0.00</td>
-              <td>0.00</td>
-              <td>0.56</td>
-              <td>5.20</td>
-              <td>1.59</td>
-              <td>14.40</td>
-              <td>20.70</td>
-            </tr>
+    <div class="results-table-wrap">
+      <table class="results-table">
+        <caption>
+          Simulation performance comparison under <strong>behavioral rationality metrics</strong>.
+          Spd., Ang., and Dist. denote speed, angular speed, and nearest-agent distance;
+          P-Ag. and P-Sc. denote per-agent and per-scene rates, respectively.
+        </caption>
 
-            <tr>
-              <td>GUMP</td>
-              <td>Top-K</td>
-              <td>ECCV 2024</td>
-              <td>4.78</td>
-              <td>5.41</td>
-              <td>11.36</td>
-              <td>4.06</td>
-              <td>36.30</td>
-              <td>3.80</td>
-              <td>26.90</td>
-              <td>32.70</td>
-            </tr>
+        <thead>
+          <tr>
+            <th rowspan="2">Base Model</th>
+            <th rowspan="2">Strategy</th>
+            <th rowspan="2">Reference</th>
+            <th colspan="3">JSD (× 10<sup>−2</sup>) ↓</th>
+            <th colspan="2">Collision (%) ↓</th>
+            <th colspan="2">Offroad (%) ↓</th>
+            <th rowspan="2">Traffic (%) ↓<br />P-Sc.</th>
+          </tr>
+          <tr>
+            <th>Spd.</th>
+            <th>Ang.</th>
+            <th>Dist.</th>
+            <th>P-Ag.</th>
+            <th>P-Sc.</th>
+            <th>P-Ag.</th>
+            <th>P-Sc.</th>
+          </tr>
+        </thead>
 
-            <tr>
-              <td>SMART</td>
-              <td>Top-K</td>
-              <td>NeurIPS 2024</td>
-              <td>1.07</td>
-              <td>3.23</td>
-              <td>0.56</td>
-              <td>3.13</td>
-              <td>15.10</td>
-              <td>2.52</td>
-              <td>19.10</td>
-              <td>38.80</td>
-            </tr>
+        <tbody>
+          <tr>
+            <td>Log</td>
+            <td>Log replay</td>
+            <td>--</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>0.56</td>
+            <td>5.20</td>
+            <td>1.59</td>
+            <td>14.40</td>
+            <td>20.70</td>
+          </tr>
 
-            <tr>
-              <td>CAT-K</td>
-              <td>Top-K</td>
-              <td>CVPR 2025</td>
-              <td>1.02</td>
-              <td>2.96</td>
-              <td><strong>0.53</strong></td>
-              <td>3.41</td>
-              <td>15.70</td>
-              <td>2.54</td>
-              <td>19.50</td>
-              <td>36.50</td>
-            </tr>
+          <tr class="section-divider">
+            <td>GUMP</td>
+            <td>Top-K</td>
+            <td>ECCV 2024</td>
+            <td>4.78</td>
+            <td>5.41</td>
+            <td>11.36</td>
+            <td>4.06</td>
+            <td>36.30</td>
+            <td>3.80</td>
+            <td>26.90</td>
+            <td>32.70</td>
+          </tr>
 
-            <tr>
-              <td>R1Sim</td>
-              <td>Top-K</td>
-              <td>IEEE R-AL</td>
-              <td>1.05</td>
-              <td>3.16</td>
-              <td>0.56</td>
-              <td>3.36</td>
-              <td>15.50</td>
-              <td>2.23</td>
-              <td>16.30</td>
-              <td>36.60</td>
-            </tr>
+          <tr>
+            <td>SMART</td>
+            <td>Top-K</td>
+            <td>NeurIPS 2024</td>
+            <td>1.07</td>
+            <td>3.23</td>
+            <td>0.56</td>
+            <td>3.13</td>
+            <td>15.10</td>
+            <td>2.52</td>
+            <td>19.10</td>
+            <td>38.80</td>
+          </tr>
 
-            <tr>
-              <td>CAT-K</td>
-              <td>Auto-labeler</td>
-              <td>-</td>
-              <td>1.19</td>
-              <td>3.02</td>
-              <td>0.67</td>
-              <td>3.21</td>
-              <td>15.50</td>
-              <td>2.57</td>
-              <td>20.30</td>
-              <td>36.70</td>
-            </tr>
+          <tr>
+            <td>CAT-K</td>
+            <td>Top-K</td>
+            <td>CVPR 2025</td>
+            <td>1.02</td>
+            <td>2.96</td>
+            <td><strong>0.53</strong></td>
+            <td>3.41</td>
+            <td>15.70</td>
+            <td>2.54</td>
+            <td>19.50</td>
+            <td>36.50</td>
+          </tr>
 
-            <tr class="highlight-row">
-              <td>CAT-K</td>
-              <td><strong>CRAFT</strong></td>
-              <td>-</td>
-              <td>0.92</td>
-              <td><strong>2.20</strong></td>
-              <td>0.69</td>
-              <td><strong>2.46</strong></td>
-              <td><strong>10.80</strong></td>
-              <td>2.26</td>
-              <td><strong>16.60</strong></td>
-              <td>26.60</td>
-            </tr>
+          <tr>
+            <td>R1Sim</td>
+            <td>Top-K</td>
+            <td>IEEE R-AL</td>
+            <td>1.05</td>
+            <td>3.16</td>
+            <td>0.56</td>
+            <td>3.36</td>
+            <td>15.50</td>
+            <td>2.23</td>
+            <td>16.30</td>
+            <td>36.60</td>
+          </tr>
 
-            <tr class="highlight-row">
-              <td>SMART</td>
-              <td><strong>CRAFT</strong></td>
-              <td>-</td>
-              <td><strong>0.91</strong></td>
-              <td><strong>2.20</strong></td>
-              <td>0.72</td>
-              <td>2.60</td>
-              <td>11.90</td>
-              <td><strong>2.06</strong></td>
-              <td>17.10</td>
-              <td><strong>25.90</strong></td>
-            </tr>
-          </tbody>
-        </table>
+          <tr class="section-divider">
+            <td>CAT-K</td>
+            <td>Auto-labeler</td>
+            <td>-</td>
+            <td>1.19</td>
+            <td>3.02</td>
+            <td>0.67</td>
+            <td>3.21</td>
+            <td>15.50</td>
+            <td>2.57</td>
+            <td>20.30</td>
+            <td>36.70</td>
+          </tr>
+
+          <tr class="craft-row">
+            <td>CAT-K</td>
+            <td><span class="method-tag">CRAFT</span></td>
+            <td>-</td>
+            <td>0.92</td>
+            <td><strong>2.20</strong></td>
+            <td>0.69</td>
+            <td><strong>2.46</strong></td>
+            <td><strong>10.80</strong></td>
+            <td>2.26</td>
+            <td><strong>16.60</strong></td>
+            <td>26.60</td>
+          </tr>
+
+          <tr class="craft-row">
+            <td>SMART</td>
+            <td><span class="method-tag">CRAFT</span></td>
+            <td>-</td>
+            <td><strong>0.91</strong></td>
+            <td><strong>2.20</strong></td>
+            <td>0.72</td>
+            <td>2.60</td>
+            <td>11.90</td>
+            <td><strong>2.06</strong></td>
+            <td>17.10</td>
+            <td><strong>25.90</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+    <div class="analysis-card">
+      <div class="analysis-figure-box">
+        <img
+          class="figure small-figure"
+          src="assets/risk_assessment.png"
+          alt="Risk assessment"
+        />
       </div>
-    </section>
+      <h3>Proactive Risk Assessment</h3>
+      <p>
+        CPE can identify abnormal agents before failures fully emerge.
+      </p>
+    </div>
+
+    <div class="analysis-card">
+      <div class="analysis-figure-box">
+        <img
+          class="figure small-figure"
+          src="assets/error_accumulation.png"
+          alt="Error accumulation"
+        />
+      </div>
+      <h3>Error Accumulation</h3>
+      <p>
+        CRAFT reduces abnormal agent rates during long-horizon rollouts.
+      </p>
+    </div>
+  </div>
+
 
     <section>
-      <h2>Analysis of Test-Time Alignment</h2>
+    <h2>Robustness Analysis</h2>
 
-      <div class="analysis-grid">
-        <div class="analysis-card">
-          <img class="figure small-figure" src="assets/risk_assessment.png" alt="Risk assessment" />
-          <h3>Proactive Risk Assessment</h3>
-          <p>
-            CPE can identify abnormal agents before failures fully emerge.
-          </p>
-        </div>
+    <img
+      class="figure"
+      src="assets/robustness.png"
+      alt="Robustness analysis"
+    />
 
-        <div class="analysis-card">
-          <img class="figure small-figure" src="assets/error_accumulation.png" alt="Error accumulation" />
-          <h3>Error Accumulation</h3>
-          <p>
-            CRAFT reduces abnormal agent rates during long-horizon rollouts.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Robustness Analysis</h2>
-      <img class="figure" src="assets/robustness.png" alt="Robustness analysis" />
+    <div class="robustness-text">
       <p>
-        CRAFT remains effective under different preference data sizes, guidance scales β, and candidate pool sizes K.
+        <strong>Robustness to Training and Inference Configurations.</strong>
+        The figure shows that CRAFT remains robust across both training and
+        inference configurations. Increasing the amount of preference training
+        data consistently improves behavioral metrics, suggesting that CPE
+        benefits from broader coverage of simulator-induced failure modes.
+        During test-time alignment, a moderate guidance scale β achieves the
+        best trade-off: a small β provides limited correction, whereas an
+        overly large β over-calibrates the base distribution and degrades
+        performance. A similar trend appears for candidate size K: increasing
+        K from 16 to 32 improves guidance quality, while a larger candidate
+        pool introduces noisier actions and reduces rollout stability.
       </p>
-    </section>
+    </div>
+  </section>
+
 
     <section>
       <h2>Key Findings</h2>
