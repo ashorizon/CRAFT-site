@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>
+    Bridging Local Observation and Global Simulation in Closed-Loop Traffic Modeling
+  </title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+
+<body>
+  <main class="page">
+    <header class="hero">
+      <h1>Bridging Local Observation and Global Simulation in Closed-Loop Traffic Modeling</h1>
+
+      <p class="authors">
+        Ziyan Wang<sup>1,2*</sup>, Tan Xiang<sup>1*</sup>, Peng Chen<sup>1</sup>, Xintao Yan<sup>2</sup>
+      </p>
+
+      <p class="affiliation">
+        <sup>1</sup>Beihang University,
+        <sup>2</sup>The University of Hong Kong,
+        <sup>*</sup>Equal contribution
+      </p>
+
+      <div class="links">
+        <a href="#">Paper</a>
+        <a href="#">arXiv</a>
+        <a href="#">Code</a>
+      </div>
+    </header>
+
+    <section class="teaser">
+      <div class="media-box">
+        <p class="media-label">Teaser / Demo Video Placeholder</p>
+        <p>
+          Add a short demo showing baseline failures and CRAFT-aligned rollouts.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Abstract</h2>
+      <p>
+        Autoregressive traffic simulators trained on ego-centric driving logs can suffer from a local-to-global context mismatch
+        when deployed in globally observable closed-loop environments. This mismatch may cause unrealistic behaviors such as
+        abnormal stops, unsafe interactions, and rule violations.
+      </p>
+      <p>
+        We propose <strong>CRAFT</strong>, a Contextual Reference Alignment Framework for Traffic Simulation. CRAFT discovers
+        context-induced failures through what-if rollouts, trains a Contextual Preference Evaluator, and uses it as a plug-in
+        test-time guidance module to improve closed-loop realism, safety, and rule compliance without retraining the base simulator.
+      </p>
+    </section>
+
+    <section>
+      <h2>Why Local Logs Fail in Closed-Loop Simulation</h2>
+
+      <img
+        class="figure"
+        src="assets/motivation.png"
+        alt="Motivation for CRAFT"
+      />
+
+      <p>
+        Logged driving data captures partial local observations, whereas closed-loop
+        simulation exposes the complete scene context. This mismatch can lead to
+        unrealistic interactions, abnormal stops, and rule violations.
+      </p>
+    </section>
+
+
+    <section>
+      <h2>Method Overview</h2>
+
+      <p class="section-lead">
+        CRAFT learns contextual preferences from simulator-induced failures, then
+        applies them as plug-in guidance during closed-loop rollout.
+      </p>
+
+      <div class="method-stage">
+        <h3>Training: Learn Contextual Preferences from What-If Rollouts</h3>
+
+        <img
+          class="method-figure"
+          src="assets/pipeline.png"
+          alt="CRAFT training pipeline"
+        />
+
+        <p>
+          A frozen simulator generates diverse rollouts, from which CRAFT identifies
+          failures and constructs preference pairs under complete scene context.
+        </p>
+      </div>
+
+      <div class="method-stage">
+        <h3>Inference: Reweight Candidate Actions with CPE</h3>
+
+        <img
+          class="method-figure"
+          src="assets/inference_pipeline.png"
+          alt="CRAFT inference pipeline"
+        />
+
+        <p>
+          CPE evaluates Top-K candidate actions using one-step lookahead scenes and
+          reweights the simulator distribution without retraining the base model.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Qualitative Results</h2>
+      <div class="video-grid">
+        <div class="video-card">
+          <video controls preload="metadata" poster="assets/poster_rule.jpg">
+            <source src="assets/rule_compliance.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div class="video-desc">
+            <h3>Traffic Rule Compliance</h3>
+            <p>
+              The baseline violates the traffic signal, while CRAFT follows the rule and completes the interaction safely.
+            </p>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata" poster="assets/poster_stop.jpg">
+            <source src="assets/abnormal_stop.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div class="video-desc">
+            <h3>Abnormal Stop Mitigation</h3>
+            <p>
+              CRAFT avoids unnecessary stopping and maintains smoother traffic flow.
+            </p>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata" poster="assets/poster_interaction.jpg">
+            <source src="assets/unsafe_interaction.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div class="video-desc">
+            <h3>Safer Interaction</h3>
+            <p>
+              CRAFT produces more coordinated multi-agent behaviors under global context.
+            </p>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <video controls preload="metadata" poster="assets/poster_rollout.jpg">
+            <source src="assets/long_horizon_rollout.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div class="video-desc">
+            <h3>Long-Horizon Stability</h3>
+            <p>
+              CRAFT suppresses error accumulation during closed-loop rollout.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Main Quantitative Results</h2>
+
+      <div class="results-table-wrap">
+        <table class="results-table">
+          <colgroup>
+            <col class="base-col" />
+            <col class="strategy-col" />
+            <col class="metric-col" span="8" />
+          </colgroup>
+
+          <thead>
+            <tr>
+              <th rowspan="2">Base Model</th>
+              <th rowspan="2">Strategy</th>
+              <th colspan="3">JSD (× 10<sup>−2</sup>) ↓</th>
+              <th class="group-start" colspan="2">Collision (%) ↓</th>
+              <th class="group-start" colspan="2">Offroad (%) ↓</th>
+              <th class="group-start traffic-head" rowspan="2">
+                <span>Traffic (%) ↓</span>
+                <span class="traffic-sub">P-Sc.</span>
+              </th>
+            </tr>
+            <tr>
+              <th>Spd.</th>
+              <th>Ang.</th>
+              <th>Dist.</th>
+              <th class="group-start">P-Ag.</th>
+              <th>P-Sc.</th>
+              <th class="group-start">P-Ag.</th>
+              <th>P-Sc.</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td data-label="Base Model"><strong>Log</strong></td>
+              <td data-label="Strategy">Log replay</td>
+              <td data-label="Spd. JSD">0.00</td>
+              <td data-label="Ang. JSD">0.00</td>
+              <td data-label="Dist. JSD">0.00</td>
+              <td class="group-start" data-label="Collision P-Ag.">0.56</td>
+              <td data-label="Collision P-Sc.">5.20</td>
+              <td class="group-start" data-label="Offroad P-Ag.">1.59</td>
+              <td data-label="Offroad P-Sc.">14.40</td>
+              <td class="group-start" data-label="Traffic P-Sc.">20.70</td>
+            </tr>
+
+            <tr class="section-divider">
+              <td data-label="Base Model"><strong>GUMP</strong></td>
+              <td data-label="Strategy">Top-K</td>
+              <td data-label="Spd. JSD">4.78</td>
+              <td data-label="Ang. JSD">5.41</td>
+              <td data-label="Dist. JSD">11.36</td>
+              <td class="group-start" data-label="Collision P-Ag.">4.06</td>
+              <td data-label="Collision P-Sc.">36.30</td>
+              <td class="group-start" data-label="Offroad P-Ag.">3.80</td>
+              <td data-label="Offroad P-Sc.">26.90</td>
+              <td class="group-start" data-label="Traffic P-Sc.">32.70</td>
+            </tr>
+
+            <tr>
+              <td data-label="Base Model"><strong>SMART</strong></td>
+              <td data-label="Strategy">Top-K</td>
+              <td data-label="Spd. JSD">1.07</td>
+              <td data-label="Ang. JSD">3.23</td>
+              <td data-label="Dist. JSD">0.56</td>
+              <td class="group-start" data-label="Collision P-Ag.">3.13</td>
+              <td data-label="Collision P-Sc.">15.10</td>
+              <td class="group-start" data-label="Offroad P-Ag.">2.52</td>
+              <td data-label="Offroad P-Sc.">19.10</td>
+              <td class="group-start" data-label="Traffic P-Sc.">38.80</td>
+            </tr>
+
+            <tr>
+              <td data-label="Base Model"><strong>CAT-K</strong></td>
+              <td data-label="Strategy">Top-K</td>
+              <td data-label="Spd. JSD">1.02</td>
+              <td data-label="Ang. JSD">2.96</td>
+              <td data-label="Dist. JSD"><strong>0.53</strong></td>
+              <td class="group-start" data-label="Collision P-Ag.">3.41</td>
+              <td data-label="Collision P-Sc.">15.70</td>
+              <td class="group-start" data-label="Offroad P-Ag.">2.54</td>
+              <td data-label="Offroad P-Sc.">19.50</td>
+              <td class="group-start" data-label="Traffic P-Sc.">36.50</td>
+            </tr>
+
+            <tr>
+              <td data-label="Base Model"><strong>R1Sim</strong></td>
+              <td data-label="Strategy">Top-K</td>
+              <td data-label="Spd. JSD">1.05</td>
+              <td data-label="Ang. JSD">3.16</td>
+              <td data-label="Dist. JSD">0.56</td>
+              <td class="group-start" data-label="Collision P-Ag.">3.36</td>
+              <td data-label="Collision P-Sc.">15.50</td>
+              <td class="group-start" data-label="Offroad P-Ag.">2.23</td>
+              <td data-label="Offroad P-Sc.">16.30</td>
+              <td class="group-start" data-label="Traffic P-Sc.">36.60</td>
+            </tr>
+
+            <tr class="section-divider">
+              <td data-label="Base Model"><strong>CAT-K</strong></td>
+              <td data-label="Strategy">Auto-labeler</td>
+              <td data-label="Spd. JSD">1.19</td>
+              <td data-label="Ang. JSD">3.02</td>
+              <td data-label="Dist. JSD">0.67</td>
+              <td class="group-start" data-label="Collision P-Ag.">3.21</td>
+              <td data-label="Collision P-Sc.">15.50</td>
+              <td class="group-start" data-label="Offroad P-Ag.">2.57</td>
+              <td data-label="Offroad P-Sc.">20.30</td>
+              <td class="group-start" data-label="Traffic P-Sc.">36.70</td>
+            </tr>
+
+            <tr class="craft-row">
+              <td data-label="Base Model"><strong>CAT-K</strong></td>
+              <td data-label="Strategy"><span class="craft-tag">CRAFT</span></td>
+              <td data-label="Spd. JSD">0.92</td>
+              <td data-label="Ang. JSD"><strong>2.20</strong></td>
+              <td data-label="Dist. JSD">0.69</td>
+              <td class="group-start" data-label="Collision P-Ag."><strong>2.46</strong></td>
+              <td data-label="Collision P-Sc."><strong>10.80</strong></td>
+              <td class="group-start" data-label="Offroad P-Ag.">2.26</td>
+              <td data-label="Offroad P-Sc."><strong>16.60</strong></td>
+              <td class="group-start" data-label="Traffic P-Sc.">26.60</td>
+            </tr>
+
+            <tr class="craft-row">
+              <td data-label="Base Model"><strong>SMART</strong></td>
+              <td data-label="Strategy"><span class="craft-tag">CRAFT</span></td>
+              <td data-label="Spd. JSD"><strong>0.91</strong></td>
+              <td data-label="Ang. JSD"><strong>2.20</strong></td>
+              <td data-label="Dist. JSD">0.72</td>
+              <td class="group-start" data-label="Collision P-Ag.">2.60</td>
+              <td data-label="Collision P-Sc.">11.90</td>
+              <td class="group-start" data-label="Offroad P-Ag."><strong>2.06</strong></td>
+              <td data-label="Offroad P-Sc.">17.10</td>
+              <td class="group-start" data-label="Traffic P-Sc."><strong>25.90</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <section>
+      <h2>Test-Time Alignment Analysis</h2>
+
+      <div class="analysis-pair">
+        <figure class="analysis-figure-box">
+          <img
+            src="assets/risk_assessment.png"
+            alt="Proactive risk assessment"
+          />
+        </figure>
+
+        <figure class="analysis-figure-box">
+          <img
+            src="assets/error_accumulation.png"
+            alt="Error accumulation"
+          />
+        </figure>
+      </div>
+
+      <p class="analysis-caption">
+        CPE identifies emerging abnormal behaviors before failures fully develop and
+        suppresses their accumulation during long-horizon closed-loop rollout.
+      </p>
+    </section>
+
+    <section>
+      <h2>Robustness Analysis</h2>
+
+      <img
+        class="figure"
+        src="assets/robustness.png"
+        alt="Robustness analysis"
+      />
+
+      <p class="robustness-copy">
+        CRAFT remains effective across both training and inference configurations.
+        More preference data consistently improves performance, while a moderate
+        guidance scale and candidate pool size provide the most stable test-time alignment.
+      </p>
+    </section>
+
+    <section>
+      <h2>Key Findings</h2>
+      <ul>
+        <li>
+          <strong>Better closed-loop safety:</strong> CRAFT reduces collision, off-road, and traffic violation rates.
+        </li>
+        <li>
+          <strong>General plug-in guidance:</strong> CRAFT improves both CAT-K and SMART without retraining the base simulator.
+        </li>
+        <li>
+          <strong>More rational rollouts:</strong> CRAFT mitigates abnormal stops and unsafe interactions.
+        </li>
+        <li>
+          <strong>Stable test-time alignment:</strong> CPE provides proactive risk signals and reduces error accumulation.
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>BibTeX</h2>
+      <pre><code>@inproceedings{anonymous2026craft,
+                  title     = {Bridging Local Observation and Global Simulation in Closed-Loop Traffic Modeling},
+                  author    = {Ziyan Wang, Tan Xiang, Peng Chen, Xintao Yan},
+                  booktitle = {},
+                  year      = {2026}
+                }</code></pre>
+    </section>
+
+    <footer>
+      <p>
+        For double-blind review, keep author names, affiliations, personal links, and identifying metadata anonymous.
+      </p>
+    </footer>
+  </main>
+</body>
+</html>

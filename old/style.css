@@ -1,0 +1,576 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+  background: #fff;
+  line-height: 1.6;
+}
+
+.page {
+  width: min(960px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+h1 {
+  max-width: 900px;
+  margin: 0 auto 18px;
+  font-size: 34px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+h2 {
+  margin: 44px 0 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #ddd;
+  font-size: 25px;
+}
+
+p {
+  font-size: 16px;
+}
+
+
+/* =========================
+   Hero
+========================= */
+
+.hero {
+  padding: 52px 0 28px;
+  text-align: center;
+}
+
+.authors {
+  margin: 8px 0;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.affiliation {
+  margin: 6px 0 18px;
+  color: #555;
+  font-size: 15px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.links a {
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 4px;
+  color: #fff;
+  background: #333;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.18s ease;
+}
+
+.links a:hover {
+  background: #555;
+}
+
+
+/* =========================
+   Teaser
+========================= */
+
+.teaser {
+  margin-top: 20px;
+}
+
+.media-box {
+  display: flex;
+  min-height: 300px;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #ddd;
+  border-radius: 4px;
+
+  color: #555;
+  background: #f7f7f7;
+  text-align: center;
+}
+
+.media-label {
+  margin: 0 0 8px;
+  color: #333;
+  font-weight: 700;
+}
+
+
+/* =========================
+   General Figures
+========================= */
+
+.figure {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+
+  border: 1px solid #ddd;
+  border-radius: 4px;
+
+  background: #fafafa;
+  object-fit: contain;
+}
+
+
+/* =========================
+   Method Overview
+========================= */
+
+.section-lead {
+  margin: 0 0 22px;
+  color: #5b5b5b;
+  line-height: 1.7;
+}
+
+.method-stage {
+  margin-top: 28px;
+}
+
+.method-stage + .method-stage {
+  margin-top: 38px;
+  padding-top: 32px;
+  border-top: 1px solid #e7e7e7;
+}
+
+.method-stage h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+.method-stage p {
+  margin: 12px 0 0;
+  color: #5b5b5b;
+  line-height: 1.7;
+}
+
+.method-figure {
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+
+
+/* =========================
+   Qualitative Videos
+========================= */
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 18px;
+}
+
+.video-card {
+  overflow: hidden;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.video-card video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.video-desc {
+  padding: 12px 15px 15px;
+}
+
+.video-desc h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.video-desc p {
+  margin: 0;
+  color: #555;
+  font-size: 15px;
+}
+
+
+/* =========================
+   Main Quantitative Results
+   Paper-style Table
+========================= */
+
+.results-table-wrap {
+  width: 100%;
+  margin-top: 16px;
+  overflow: hidden;
+
+  border-top: 2px solid #252525;
+  border-bottom: 2px solid #252525;
+
+  background: #fff;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  color: #1f1f1f;
+  font-family: "Times New Roman", Times, serif;
+  font-size: clamp(11px, 1.05vw, 15px);
+  font-variant-numeric: tabular-nums;
+}
+
+.results-table .base-col {
+  width: 13%;
+}
+
+.results-table .strategy-col {
+  width: 13%;
+}
+
+.results-table .metric-col {
+  width: 9.25%;
+}
+
+.results-table th,
+.results-table td {
+  padding: 7px 5px;
+  vertical-align: middle;
+  line-height: 1.2;
+}
+
+
+/* ----- Table header ----- */
+
+.results-table .traffic-head span {
+  display: block;
+}
+
+.results-table .traffic-head .traffic-sub {
+  margin: 4px 7% 0;
+  padding-top: 4px;
+  border-top: 1px solid #777;
+}
+
+
+.results-table thead th {
+  color: #1d1d1d;
+  background: #fff;
+  text-align: center;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+/* 所有第一行指标保持相同颜色和居中方式 */
+.results-table thead tr:first-child th {
+  padding-top: 9px;
+  padding-bottom: 5px;
+  border-bottom: 0;
+  background: #fff;
+  text-align: center;
+  font-size: 1.02em;
+}
+
+/* 指标组下方短横线 */
+.results-table thead tr:first-child th[colspan] {
+  position: relative;
+}
+
+.results-table thead tr:first-child th[colspan]::after {
+  content: "";
+  position: absolute;
+  right: 7%;
+  bottom: 0;
+  left: 7%;
+  height: 1px;
+  background: #777;
+}
+
+/* 第二行子指标 */
+.results-table thead tr:nth-child(2) th {
+  padding-top: 4px;
+  padding-bottom: 7px;
+
+  border-bottom: 1.5px solid #333;
+
+  color: #1d1d1d;
+  background: #fff;
+  text-align: center;
+  font-size: 0.98em;
+}
+.results-table thead tr:nth-child(2) th {
+  border-bottom: none !important;
+}
+
+/* Base Model、Strategy、Traffic 的底线与第二行对齐 */
+.results-table thead th[rowspan="2"] {
+  border-bottom: 1.5px solid #333;
+  vertical-align: middle;
+}
+
+
+/* ----- Table body ----- */
+
+.results-table tbody tr {
+  background: #fff;
+}
+
+/* 所有普通行保持统一白色，不使用斑马纹 */
+.results-table tbody tr:nth-child(odd),
+.results-table tbody tr:nth-child(even) {
+  background: #fff;
+}
+
+.results-table tbody td {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 前两列左对齐 */
+.results-table tbody td:first-child,
+.results-table tbody td:nth-child(2) {
+  padding-left: 14px;
+  text-align: left;
+}
+
+/* 不同实验组之间的水平分隔线 */
+.results-table tbody tr.section-divider td {
+  border-top: 1.25px solid #555;
+}
+
+/* 不使用网页式竖线 */
+.results-table .group-start {
+  border-left: 0;
+}
+
+/* CRAFT 行统一浅蓝色 */
+.results-table tbody tr.craft-row,
+.results-table tbody tr.craft-row:nth-child(odd),
+.results-table tbody tr.craft-row:nth-child(even) {
+  background: #eaf4ff;
+}
+
+.results-table tbody tr.craft-row td {
+  background: transparent;
+}
+
+.results-table strong {
+  font-weight: 800;
+}
+
+.craft-tag {
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+
+/* =========================
+   Alignment Analysis
+========================= */
+
+.analysis-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+  margin-top: 16px;
+}
+
+.analysis-figure-box {
+  display: flex;
+  height: clamp(210px, 28vw, 320px);
+  margin: 0;
+  overflow: hidden;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+
+  background: #fafafa;
+}
+
+.analysis-figure-box img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: contain;
+}
+
+.analysis-caption {
+  margin: 14px 0 0;
+  color: #5b5b5b;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   Robustness
+========================= */
+
+.robustness-copy {
+  margin: 14px 0 0;
+  color: #5b5b5b;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   BibTeX and Footer
+========================= */
+
+pre {
+  overflow-x: auto;
+  padding: 16px;
+
+  border: 1px solid #ddd;
+  border-radius: 4px;
+
+  background: #f7f7f7;
+  font-size: 14px;
+}
+
+footer {
+  margin: 48px 0 40px;
+  padding-top: 18px;
+
+  border-top: 1px solid #ddd;
+
+  color: #666;
+  text-align: center;
+  font-size: 14px;
+}
+
+
+/* =========================
+   Responsive Results Table
+========================= */
+
+@media (max-width: 900px) {
+  .results-table-wrap {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .results-table,
+  .results-table tbody {
+    display: block;
+  }
+
+  .results-table colgroup,
+  .results-table thead {
+    display: none;
+  }
+
+  .results-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 18px;
+
+    margin-bottom: 14px;
+    padding: 12px 14px;
+
+    border: 1px solid #d9d9d9;
+    border-top: 2px solid #333;
+    border-radius: 7px;
+
+    background: #fff;
+  }
+
+  .results-table tbody tr.craft-row {
+    background: #eaf4ff;
+  }
+
+  .results-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+
+    padding: 7px 0;
+    border-bottom: 1px solid #e6e6e6;
+
+    text-align: right;
+    white-space: normal;
+  }
+
+  .results-table tbody td::before {
+    content: attr(data-label);
+    flex: 1;
+
+    color: #555;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .results-table tbody td:first-child,
+  .results-table tbody td:nth-child(2) {
+    padding-left: 0;
+    text-align: right;
+  }
+
+  .results-table tbody td:last-child {
+    border-bottom: 0;
+  }
+
+  .results-table tbody tr.section-divider td {
+    border-top: 0;
+  }
+}
+
+
+/* =========================
+   General Mobile Layout
+========================= */
+
+@media (max-width: 760px) {
+  h1 {
+    font-size: 27px;
+  }
+
+  .media-box {
+    min-height: 220px;
+  }
+
+  .video-grid,
+  .analysis-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-figure-box {
+    height: 280px;
+  }
+}
+
+@media (max-width: 560px) {
+  .results-table tbody tr {
+    grid-template-columns: 1fr;
+  }
+}
