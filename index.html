@@ -123,6 +123,202 @@
         grid-template-columns: 1fr;
       }
     }
+    /* ===== Main Quantitative Results ===== */
+    .results-table-wrap {
+      width: 100%;
+      margin-top: 14px;
+      overflow: hidden !important;
+      container-type: inline-size;
+      border-top: 1.5px solid #2d2d2d;
+      border-bottom: 1px solid #dcdcdc;
+      background: #fff;
+    }
+
+    .results-table {
+      width: 100% !important;
+      min-width: 0 !important;
+      border-collapse: collapse;
+      table-layout: fixed;
+      color: #292929;
+      font-size: clamp(10px, 1vw, 13px);
+    }
+
+    .results-table .base-col {
+      width: 13%;
+    }
+
+    .results-table .strategy-col {
+      width: 13%;
+    }
+
+    .results-table .metric-col {
+      width: 9.25%;
+    }
+
+    .results-table th,
+    .results-table td {
+      padding: 9px 5px;
+      border-bottom: 1px solid #e7e7e7;
+      text-align: center;
+      vertical-align: middle;
+      line-height: 1.35;
+    }
+
+    .results-table th {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .results-table td {
+      white-space: nowrap;
+    }
+
+    .results-table td:first-child,
+    .results-table td:nth-child(2) {
+      text-align: left;
+      white-space: normal;
+    }
+
+    .results-table thead tr:first-child th {
+      background: #f4f4f4 !important;
+      color: #222 !important;
+      border-bottom: 1px solid #cfcfcf;
+      font-weight: 700;
+    }
+
+    .results-table thead tr:nth-child(2) th {
+      background: #fafafa !important;
+      color: #555 !important;
+      font-size: 0.94em;
+      font-weight: 700;
+    }
+
+    .results-table .group-start {
+      border-left: 1px solid #dcdcdc;
+    }
+
+    .results-table tbody tr:nth-child(even):not(.craft-row) {
+      background: #fcfcfc;
+    }
+
+    .results-table tbody tr.section-divider td {
+      border-top: 1.5px solid #bdbdbd;
+    }
+
+    .results-table tbody tr.craft-row {
+      background: #f6f6f6;
+    }
+
+    .results-table tbody tr.craft-row td:first-child {
+      border-left: 3px solid #333;
+    }
+
+    .results-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .craft-tag {
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    /* 当表格容器太窄时，自动变成卡片，绝不出现横向滚动条 */
+    @container (max-width: 900px) {
+      .results-table-wrap {
+        overflow: visible !important;
+        border: 0;
+      }
+
+      .results-table,
+      .results-table tbody {
+        display: block;
+      }
+
+      .results-table colgroup,
+      .results-table thead {
+        display: none;
+      }
+
+      .results-table tbody tr {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 16px;
+        margin-bottom: 14px;
+        padding: 12px 14px;
+        border: 1px solid #dfdfdf;
+        border-top: 2px solid #333;
+        border-radius: 7px;
+        background: #fff !important;
+      }
+
+      .results-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 7px 0;
+        border-bottom: 1px solid #ededed;
+        text-align: right !important;
+        white-space: normal;
+      }
+
+      .results-table tbody td::before {
+        content: attr(data-label);
+        color: #666;
+        font-weight: 650;
+        text-align: left;
+      }
+
+      .results-table tbody td:first-child,
+      .results-table tbody td:nth-child(2) {
+        text-align: right !important;
+      }
+
+      .results-table tbody td:nth-child(2) {
+        border-bottom: 1px solid #ededed;
+      }
+
+      .results-table tbody td:last-child {
+        border-bottom: 0;
+      }
+
+      .results-table .group-start,
+      .results-table tbody tr.craft-row td:first-child {
+        border-left: 0;
+      }
+    }
+
+    /* ===== Test-Time Alignment Analysis ===== */
+    .analysis-pair {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 16px;
+    }
+
+    .analysis-figure-box {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      height: clamp(210px, 28vw, 320px);
+      margin: 0 !important;
+      overflow: hidden;
+      border: 1px solid #e5e5e5;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+
+    .analysis-figure-box img,
+    .analysis-figure-box .figure,
+    .analysis-figure-box .small-figure {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      max-height: none !important;
+      margin: 0 !important;
+      object-fit: contain !important;
+    }
+
   </style>
 </head>
 
@@ -224,13 +420,6 @@
           CPE evaluates Top-K candidate actions using one-step lookahead scenes and
           reweights the simulator distribution without retraining the base model.
         </p>
-
-        <p class="guidance-equation">
-          <strong>Guidance:</strong>
-          P<sup>post</sup><sub>i,t,k</sub> ∝
-          P<sup>prior</sup><sub>i,t,k</sub> ·
-          exp(β · R<sub>t</sub><sup>(k)</sup>)
-        </p>
       </div>
     </section>
 
@@ -301,17 +490,19 @@
       <div class="results-table-wrap">
         <table class="results-table">
           <colgroup>
-            <col class="method-col" />
+            <col class="base-col" />
+            <col class="strategy-col" />
             <col class="metric-col" span="8" />
           </colgroup>
 
           <thead>
             <tr>
-              <th rowspan="2">Model / Strategy</th>
+              <th rowspan="2">Base Model</th>
+              <th rowspan="2">Strategy</th>
               <th colspan="3">JSD (× 10<sup>−2</sup>) ↓</th>
-              <th colspan="2">Collision (%) ↓</th>
-              <th colspan="2">Offroad (%) ↓</th>
-              <th rowspan="2">Traffic (%) ↓<br />P-Sc.</th>
+              <th class="group-start" colspan="2">Collision (%) ↓</th>
+              <th class="group-start" colspan="2">Offroad (%) ↓</th>
+              <th class="group-start" rowspan="2">Traffic (%) ↓<br />P-Sc.</th>
             </tr>
             <tr>
               <th>Spd.</th>
@@ -326,10 +517,8 @@
 
           <tbody>
             <tr>
-              <td data-label="Model / Strategy">
-                <strong>Log</strong>
-                <span class="strategy-name">Log replay</span>
-              </td>
+              <td data-label="Base Model"><strong>Log</strong></td>
+              <td data-label="Strategy">Log replay</td>
               <td data-label="Spd. JSD">0.00</td>
               <td data-label="Ang. JSD">0.00</td>
               <td data-label="Dist. JSD">0.00</td>
@@ -341,10 +530,8 @@
             </tr>
 
             <tr class="section-divider">
-              <td data-label="Model / Strategy">
-                <strong>GUMP</strong>
-                <span class="strategy-name">Top-K</span>
-              </td>
+              <td data-label="Base Model"><strong>GUMP</strong></td>
+              <td data-label="Strategy">Top-K</td>
               <td data-label="Spd. JSD">4.78</td>
               <td data-label="Ang. JSD">5.41</td>
               <td data-label="Dist. JSD">11.36</td>
@@ -356,10 +543,8 @@
             </tr>
 
             <tr>
-              <td data-label="Model / Strategy">
-                <strong>SMART</strong>
-                <span class="strategy-name">Top-K</span>
-              </td>
+              <td data-label="Base Model"><strong>SMART</strong></td>
+              <td data-label="Strategy">Top-K</td>
               <td data-label="Spd. JSD">1.07</td>
               <td data-label="Ang. JSD">3.23</td>
               <td data-label="Dist. JSD">0.56</td>
@@ -371,10 +556,8 @@
             </tr>
 
             <tr>
-              <td data-label="Model / Strategy">
-                <strong>CAT-K</strong>
-                <span class="strategy-name">Top-K</span>
-              </td>
+              <td data-label="Base Model"><strong>CAT-K</strong></td>
+              <td data-label="Strategy">Top-K</td>
               <td data-label="Spd. JSD">1.02</td>
               <td data-label="Ang. JSD">2.96</td>
               <td data-label="Dist. JSD"><strong>0.53</strong></td>
@@ -386,10 +569,8 @@
             </tr>
 
             <tr>
-              <td data-label="Model / Strategy">
-                <strong>R1Sim</strong>
-                <span class="strategy-name">Top-K</span>
-              </td>
+              <td data-label="Base Model"><strong>R1Sim</strong></td>
+              <td data-label="Strategy">Top-K</td>
               <td data-label="Spd. JSD">1.05</td>
               <td data-label="Ang. JSD">3.16</td>
               <td data-label="Dist. JSD">0.56</td>
@@ -401,10 +582,8 @@
             </tr>
 
             <tr class="section-divider">
-              <td data-label="Model / Strategy">
-                <strong>CAT-K</strong>
-                <span class="strategy-name">Auto-labeler</span>
-              </td>
+              <td data-label="Base Model"><strong>CAT-K</strong></td>
+              <td data-label="Strategy">Auto-labeler</td>
               <td data-label="Spd. JSD">1.19</td>
               <td data-label="Ang. JSD">3.02</td>
               <td data-label="Dist. JSD">0.67</td>
@@ -416,10 +595,8 @@
             </tr>
 
             <tr class="craft-row">
-              <td data-label="Model / Strategy">
-                <strong>CAT-K</strong>
-                <span class="strategy-name"><span class="craft-tag">CRAFT</span></span>
-              </td>
+              <td data-label="Base Model"><strong>CAT-K</strong></td>
+              <td data-label="Strategy"><span class="craft-tag">CRAFT</span></td>
               <td data-label="Spd. JSD">0.92</td>
               <td data-label="Ang. JSD"><strong>2.20</strong></td>
               <td data-label="Dist. JSD">0.69</td>
@@ -431,10 +608,8 @@
             </tr>
 
             <tr class="craft-row">
-              <td data-label="Model / Strategy">
-                <strong>SMART</strong>
-                <span class="strategy-name"><span class="craft-tag">CRAFT</span></span>
-              </td>
+              <td data-label="Base Model"><strong>SMART</strong></td>
+              <td data-label="Strategy"><span class="craft-tag">CRAFT</span></td>
               <td data-label="Spd. JSD"><strong>0.91</strong></td>
               <td data-label="Ang. JSD"><strong>2.20</strong></td>
               <td data-label="Dist. JSD">0.72</td>
@@ -449,13 +624,13 @@
       </div>
     </section>
 
+
     <section>
       <h2>Test-Time Alignment Analysis</h2>
 
       <div class="analysis-pair">
         <figure class="analysis-figure-box">
           <img
-            class="figure small-figure"
             src="assets/risk_assessment.png"
             alt="Proactive risk assessment"
           />
@@ -463,7 +638,6 @@
 
         <figure class="analysis-figure-box">
           <img
-            class="figure small-figure"
             src="assets/error_accumulation.png"
             alt="Error accumulation"
           />
@@ -471,10 +645,11 @@
       </div>
 
       <p class="analysis-caption">
-        CPE detects emerging abnormal behaviors before failures fully develop and
-        reduces their accumulation during long-horizon closed-loop rollout.
+        CPE identifies emerging abnormal behaviors before failures fully develop and
+        suppresses their accumulation during long-horizon closed-loop rollout.
       </p>
     </section>
+
     <section>
       <h2>Robustness Analysis</h2>
 
