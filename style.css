@@ -522,11 +522,6 @@ a {
   object-fit: contain;
 }
 
-
-/* =========================================================
-   Results table — paper style
-   ========================================================= */
-
 .results-table-wrap {
   width: 100%;
   overflow: hidden;
