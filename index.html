@@ -90,110 +90,84 @@
       </div>
     </section>
 
-    <section class="section" id="overview">
-      <div class="page">
-        <div class="section-heading">
-          <p class="section-kicker">Overview</p>
-          <h2>
-            Ego-centric driving logs omit global context that becomes available in
-            closed-loop simulation.
-          </h2>
-          <p class="section-lead">
-            Autoregressive traffic simulators are trained on ego-centric logs, where
-            perception limits and occlusions hide part of the context surrounding other
-            agents. When the learned context–action associations are executed in a globally
-            observable closed-loop scene, locally plausible actions can become contextually
-            inconsistent, causing abnormal stopping, unsafe interactions, and rule violations.
+    <section id="overview" class="section overview-section">
+      <div class="section-heading section-heading-center">
+        <p class="eyebrow">Overview</p>
+        <h2>
+          Closed-loop simulation exposes global context that ego-centric logs cannot fully capture.
+        </h2>
+        <p class="section-summary">
+          Autoregressive traffic simulators learn from ego-centric driving logs, where surrounding context can be incomplete due to perception limits and occlusions. When these models are rolled out in globally observable simulation, incomplete context-action associations can lead to abnormal stops, unsafe interactions, and rule violations.
+        </p>
+      </div>
+
+      <figure class="overview-figure">
+        <img
+          src="assets/motivation.png"
+          alt="Local-to-global context mismatch and the CRAFT solution"
+        />
+        <figcaption>
+          Incomplete ego-centric logs can induce flawed context-action mappings. CRAFT mitigates this mismatch by learning complete-context preferences and using them to guide closed-loop simulation toward more rational behaviors.
+        </figcaption>
+      </figure>
+    </section>
+
+
+   <section id="method" class="section method-section">
+      <div class="section-heading section-heading-center">
+        <p class="eyebrow">Method</p>
+        <h2>CRAFT turns simulator-induced failures into preference guidance.</h2>
+        <p class="section-summary">
+          CRAFT first learns a Contextual Preference Evaluator from complete-context what-if rollouts, then uses it during inference to reweight candidate actions before they are executed.
+        </p>
+      </div>
+
+      <div class="method-row">
+        <div class="method-copy">
+          <p class="method-label">Training</p>
+          <h3>Learn complete-context preferences from what-if rollouts.</h3>
+          <p>
+            A frozen autoregressive simulator generates diverse rollouts from the same logged initial scene. These grouped futures expose simulator-induced failures, which are converted into dense preference supervision for CPE.
           </p>
         </div>
 
-        <figure class="overview-figure">
+        <figure class="method-figure-box">
           <img
-            src="assets/motivation.png"
-            alt="Motivation of CRAFT: incomplete ego-centric observations create a local-to-global mismatch, while complete-context preference alignment guides rational closed-loop behavior"
+            src="assets/pipeline.png"
+            alt="CRAFT training pipeline"
           />
-          <figcaption>
-            Incomplete ego-centric logs can induce flawed context–action mappings.
-            CRAFT learns complete-context preferences from globally observable rollouts
-            and guides the simulator toward behaviorally rational actions.
-          </figcaption>
+        </figure>
+      </div>
+
+      <div class="method-row method-row-reverse">
+        <div class="method-copy">
+          <p class="method-label">Inference</p>
+          <h3>Calibrate candidate actions before execution.</h3>
+          <p>
+            At each simulation step, CPE scores one-step lookahead scenes induced by candidate actions and reweights the simulator distribution toward globally coherent behavior.
+          </p>
+        </div>
+
+        <figure class="method-figure-box">
+          <img
+            src="assets/inference_pipeline.png"
+            alt="CRAFT inference pipeline"
+          />
         </figure>
       </div>
     </section>
 
-    <section class="section section-tinted" id="method">
-      <div class="page">
-        <div class="section-heading">
-          <p class="section-kicker">Method</p>
-          <h2>
-            CRAFT learns from failures exposed in complete-context what-if rollouts,
-            then corrects decoding before execution.
-          </h2>
-          <p class="section-lead">
-            The frozen simulator first serves as a globally observable sandbox for
-            self-supervised failure discovery. A Contextual Preference Evaluator (CPE)
-            then converts these failures into dense behavioral preferences and applies
-            them as test-time guidance.
-          </p>
-        </div>
-
-        <article class="method-stage">
-          <div class="method-copy">
-            <p class="stage-label">Training</p>
-            <h3>Learn complete-context preferences from grouped alternative futures.</h3>
-            <p>
-              Starting from the same logged initial scene, the frozen simulator generates
-              multiple stochastic what-if rollouts. Human-aligned driving priors annotate
-              safety, compliance, and kinematic failures at the agent–time level. CPE is
-              trained with token-level supervision together with intra-trajectory and
-              inter-rollout preference constraints.
-            </p>
-          </div>
-
-          <figure class="method-figure-wrap">
-            <img
-              class="method-figure"
-              src="assets/pipeline.png"
-              alt="CRAFT training pipeline with grouped complete-context what-if rollouts and contextual preference learning"
-            />
-          </figure>
-        </article>
-
-        <article class="method-stage method-stage-reverse">
-          <div class="method-copy">
-            <p class="stage-label">Inference</p>
-            <h3>Evaluate one-step lookahead scenes and recalibrate candidate probabilities.</h3>
-            <p>
-              At each decoding step, the base simulator proposes Top-K candidate actions.
-              Each candidate is applied to construct a one-step lookahead scene, which CPE
-              evaluates under the complete traffic context. The resulting preference scores
-              reweight the original action probabilities before the next action is sampled.
-            </p>
-          </div>
-
-          <figure class="method-figure-wrap">
-            <img
-              class="method-figure"
-              src="assets/inference_pipeline.png"
-              alt="CRAFT inference pipeline with one-step lookahead preference evaluation and probability calibration"
-            />
-          </figure>
-        </article>
-      </div>
-    </section>
 
     <section class="section" id="rollouts">
       <div class="page">
         <div class="section-heading">
           <p class="section-kicker">Qualitative rollouts</p>
           <h2>
-            CRAFT suppresses traffic-rule violations and abnormal stopping in
-            closed-loop rollouts.
+            CRAFT guides closed-loop rollouts toward globally coherent traffic behavior.
           </h2>
-          <p class="section-lead">
-            When CAT-K selects a locally likely but contextually unreasonable action,
-            CRAFT uses complete-scene preference scores to suppress that action and
-            preserve normal driving behavior.
+          <p class="section-summary">
+            Qualitative rollouts show how complete-context preference guidance suppresses locally plausible but globally inconsistent actions, 
+            leading to safer, smoother, and more rational multi-agent simulation.
           </p>
         </div>
 
@@ -239,7 +213,7 @@
       <div class="page page-wide">
         <div class="section-heading">
           <p class="section-kicker">Main results</p>
-          <h2>CRAFT improves closed-loop behavioral rationality across CAT-K and SMART.</h2>
+          <h2>CRAFT improves closed-loop behavioral rationality.</h2>
           <p class="section-lead">
             Under all-agent behavioral metrics, CRAFT substantially reduces collisions,
             offroad events, and traffic-rule violations while maintaining competitive
