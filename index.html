@@ -43,7 +43,7 @@
 
         <p class="authors">
           Ziyan Wang<sup>1,2*</sup> · Tan Xiang<sup>1*</sup> ·
-          Peng Chen<sup>1</sup> · Xintao Yan<sup>2</sup>
+          Peng Chen<sup>1</sup> · Xintao Yan<sup>2†</sup>
         </p>
 
         <p class="affiliation">
@@ -112,6 +112,42 @@
       </figure>
     </section>
 
+    <section class="section" id="summary">
+      <div class="page">
+        <div class="section-heading">
+          <p class="section-kicker">Contributions</p>
+          <h2>
+            From incomplete log imitation to complete-context preference alignment.
+          </h2>
+        </div>
+
+        <div class="takeaway-grid">
+          <article>
+            <h3>Local-to-global mismatch</h3>
+            <p>
+              Ego-centric logs can create incomplete context–action associations that
+              degrade behavioral rationality in globally observable closed-loop rollouts.
+            </p>
+          </article>
+
+          <article>
+            <h3>Complete-context preference learning</h3>
+            <p>
+              Grouped what-if rollouts expose simulator-induced failures and provide
+              token-level, intra-trajectory, and inter-rollout supervision for CPE.
+            </p>
+          </article>
+
+          <article>
+            <h3>Preference-guided decoding</h3>
+            <p>
+              CPE evaluates one-step lookahead scenes and recalibrates candidate
+              probabilities toward globally coherent behavior before execution.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
 
 
    <section id="method" class="section method-section">
@@ -470,13 +506,12 @@
         <div class="section-heading">
           <p class="section-kicker">Robustness</p>
           <h2>
-            More preference data helps, while moderate guidance and candidate size work best.
+            Training scale, guidance strength, and candidate size jointly affect test-time alignment.
           </h2>
           <p class="section-lead">
-            Increasing the preference-training set consistently improves behavioral metrics.
-            At inference, moderate guidance avoids both under-correction and over-calibration,
-            while expanding the candidate pool from 16 to 32 improves guidance quality before
-            noisier candidates begin to reduce stability.
+            Increasing the preference-training data consistently improves behavioral metrics, indicating that CPE benefits from broader coverage of simulator-induced failure modes. 
+            At inference time, the guidance scale β controls the strength of calibration: a small β provides limited correction, while an overly large β over-calibrates the base distribution and degrades performance. 
+            Increasing the candidate pool from 16 to 32 improves guidance quality, but a larger pool introduces noisier candidates and reduces stability.
           </p>
         </div>
 
@@ -486,43 +521,6 @@
             alt="Relative performance under different preference-data sizes, guidance scales, and candidate-pool sizes"
           />
         </figure>
-      </div>
-    </section>
-
-    <section class="section" id="summary">
-      <div class="page">
-        <div class="section-heading">
-          <p class="section-kicker">Contributions</p>
-          <h2>
-            From incomplete log imitation to complete-context preference alignment.
-          </h2>
-        </div>
-
-        <div class="takeaway-grid">
-          <article>
-            <h3>Local-to-global mismatch</h3>
-            <p>
-              Ego-centric logs can create incomplete context–action associations that
-              degrade behavioral rationality in globally observable closed-loop rollouts.
-            </p>
-          </article>
-
-          <article>
-            <h3>Complete-context preference learning</h3>
-            <p>
-              Grouped what-if rollouts expose simulator-induced failures and provide
-              token-level, intra-trajectory, and inter-rollout supervision for CPE.
-            </p>
-          </article>
-
-          <article>
-            <h3>Preference-guided decoding</h3>
-            <p>
-              CPE evaluates one-step lookahead scenes and recalibrates candidate
-              probabilities toward globally coherent behavior before execution.
-            </p>
-          </article>
-        </div>
       </div>
     </section>
 
