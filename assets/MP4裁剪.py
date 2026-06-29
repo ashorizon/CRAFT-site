@@ -148,8 +148,8 @@ def select_crop_rect_from_video(input_path, frame_index=None, display_scale=0.2)
 if __name__ == "__main__":
 
     crop_mp4_to_mp4_h264(
-        "assets\Stability under Extreme Geometric Topologies_ours.mp4",
-        "assets\Stability under Extreme Geometric Topologies_ours_crop.mp4",
+        "assets\Safety-critical Interaction_ours.mp4",
+        "assets\Safety-critical Interaction_ours_crop.mp4",
         fps=None,  # None 表示使用原视频帧率
         crop_rect=(460, 1120, 2780, 1390),
         zoom_factor=1.0

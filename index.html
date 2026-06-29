@@ -194,9 +194,9 @@
       </div>
     </section>
 
-    <section id="rollouts" class="section">
-      <div class="page">
-        <div class="section-heading">
+    <section id="rollouts" class="section rollouts-section">
+        <div class="rollouts-wide">
+        <div class="section-heading section-heading-center">
           <p class="section-kicker">Qualitative Rollouts</p>
           <h2>CRAFT guides closed-loop rollouts toward globally coherent traffic behavior.</h2>
           <p class="section-lead">
@@ -212,14 +212,14 @@
               <div class="comparison-video comparison-baseline">
                 <div class="comparison-label">Baseline</div>
                 <video controls preload="metadata" poster="assets/rule_baseline_poster.jpg">
-                  <source src="assets/Logical Compliance_catk_crop.mp4" type="video/mp4" />
+                  <source src="assets/Logical Compliance_catk2_crop.mp4" type="video/mp4" />
                 </video>
               </div>
 
               <div class="comparison-video comparison-ours">
                 <div class="comparison-label">CRAFT</div>
                 <video controls preload="metadata" poster="assets/rule_craft_poster.jpg">
-                  <source src="assets/Logical Compliance_ours_crop.mp4" type="video/mp4" />
+                  <source src="assets/Logical Compliance_ours2_crop.mp4" type="video/mp4" />
                 </video>
               </div>
             </div>
@@ -264,14 +264,14 @@
               <div class="comparison-video comparison-baseline">
                 <div class="comparison-label">Baseline</div>
                 <video controls preload="metadata" poster="assets/interaction_baseline_poster.jpg">
-                  <source src="assets/Stability under Extreme Geometric Topologies_catk_crop.mp4" type="video/mp4" />
+                  <source src="assets/Safety-critical Interaction_catk_crop.mp4" type="video/mp4" />
                 </video>
               </div>
 
               <div class="comparison-video comparison-ours">
                 <div class="comparison-label">CRAFT</div>
                 <video controls preload="metadata" poster="assets/interaction_craft_poster.jpg">
-                  <source src="assets/Stability under Extreme Geometric Topologies_ours_crop.mp4" type="video/mp4" />
+                  <source src="assets/Safety-critical Interaction_ours_crop.mp4" type="video/mp4" />
                 </video>
               </div>
             </div>
@@ -280,6 +280,32 @@
               <h3>Safer multi-agent interaction</h3>
               <p>
                 The baseline rollout leads to an unsafe interaction pattern, while CRAFT recalibrates candidate actions using contextual preference scores and produces a more coherent multi-agent behavior.
+              </p>
+            </div>
+          </article>
+
+          <!-- Scenario 4 -->
+          <article class="comparison-card">
+            <div class="comparison-video-row">
+              <div class="comparison-video comparison-baseline">
+                <div class="comparison-label">Baseline</div>
+                <video controls preload="metadata" poster="assets/interaction_baseline_poster.jpg">
+                  <source src="assets/Self-recovery under Initial Perturbations_catk_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              <div class="comparison-video comparison-ours">
+                <div class="comparison-label">CRAFT</div>
+                <video controls preload="metadata" poster="assets/interaction_craft_poster.jpg">
+                  <source src="assets/Self-recovery under Initial Perturbations_ours_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+
+            <div class="comparison-desc">
+              <h3>Self-recovery under initial perturbations</h3>
+              <p>
+                The baseline struggles to recover from the initial perturbation, while CRAFT guides the vehicle back toward normal driving behavior under the complete simulated context.
               </p>
             </div>
           </article>
