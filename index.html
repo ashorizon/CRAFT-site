@@ -158,51 +158,92 @@
       </div>
     </section>
 
-
-    <section class="section" id="rollouts">
+    <section id="rollouts" class="section">
       <div class="page">
         <div class="section-heading">
-          <p class="section-kicker">Qualitative rollouts</p>
-          <h2>
-            CRAFT guides closed-loop rollouts toward globally coherent traffic behavior.
-          </h2>
-          <p class="section-summary">
-            Qualitative rollouts show how complete-context preference guidance suppresses locally plausible but globally inconsistent actions, 
-            leading to safer, smoother, and more rational multi-agent simulation.
+          <p class="section-kicker">Qualitative Rollouts</p>
+          <h2>CRAFT guides closed-loop rollouts toward globally coherent traffic behavior.</h2>
+          <p class="section-lead">
+            Each scenario compares the baseline simulator with CRAFT under the same initial scene. 
+            CRAFT uses complete-context preference guidance to suppress locally plausible but globally inconsistent actions.
           </p>
         </div>
 
-        <div class="video-grid">
-          <article class="video-card">
-            <div class="video-shell">
-              <span class="video-badge">Rule compliance</span>
-              <video controls preload="metadata" poster="assets/poster_rule.jpg">
-                <source src="assets/rule_compliance.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+        <div class="comparison-list">
+          <!-- Scenario 1 -->
+          <article class="comparison-card">
+            <div class="comparison-video-row">
+              <div class="comparison-video comparison-baseline">
+                <div class="comparison-label">Baseline</div>
+                <video controls preload="metadata" poster="assets/rule_baseline_poster.jpg">
+                  <source src="assets/Logical Compliance_catk_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              <div class="comparison-video comparison-ours">
+                <div class="comparison-label">CRAFT</div>
+                <video controls preload="metadata" poster="assets/rule_craft_poster.jpg">
+                  <source src="assets/Logical Compliance_ours_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
             </div>
-            <div class="video-desc">
+
+            <div class="comparison-desc">
               <h3>Traffic-signal compliance</h3>
               <p>
-                CAT-K runs the red light, whereas CRAFT suppresses the violating action
-                and reliably complies with the traffic signal.
+                The baseline selects an action that violates the traffic signal, while CRAFT suppresses the violating candidate and maintains rule-compliant behavior.
               </p>
             </div>
           </article>
 
-          <article class="video-card">
-            <div class="video-shell">
-              <span class="video-badge">Behavioral stability</span>
-              <video controls preload="metadata" poster="assets/poster_stop.jpg">
-                <source src="assets/abnormal_stop.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+          <!-- Scenario 2 -->
+          <article class="comparison-card">
+            <div class="comparison-video-row">
+              <div class="comparison-video comparison-baseline">
+                <div class="comparison-label">Baseline</div>
+                <video controls preload="metadata" poster="assets/stop_baseline_poster.jpg">
+                  <source src="assets/Behavioral Stability_catk_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              <div class="comparison-video comparison-ours">
+                <div class="comparison-label">CRAFT</div>
+                <video controls preload="metadata" poster="assets/stop_craft_poster.jpg">
+                  <source src="assets/Behavioral Stability_ours_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
             </div>
-            <div class="video-desc">
+
+            <div class="comparison-desc">
               <h3>Abnormal-stop mitigation</h3>
               <p>
-                CAT-K stops without a valid cause and disrupts traffic flow, while CRAFT
-                maintains smooth forward motion and flow stability.
+                The baseline produces an unexplained stop under the complete simulated context, whereas CRAFT guides the rollout toward smoother forward motion and preserves traffic flow.
+              </p>
+            </div>
+          </article>
+
+          <!-- Scenario 3 -->
+          <article class="comparison-card">
+            <div class="comparison-video-row">
+              <div class="comparison-video comparison-baseline">
+                <div class="comparison-label">Baseline</div>
+                <video controls preload="metadata" poster="assets/interaction_baseline_poster.jpg">
+                  <source src="assets/Stability under Extreme Geometric Topologies_catk_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
+
+              <div class="comparison-video comparison-ours">
+                <div class="comparison-label">CRAFT</div>
+                <video controls preload="metadata" poster="assets/interaction_craft_poster.jpg">
+                  <source src="assets/Stability under Extreme Geometric Topologies_ours_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+
+            <div class="comparison-desc">
+              <h3>Safer multi-agent interaction</h3>
+              <p>
+                The baseline rollout leads to an unsafe interaction pattern, while CRAFT recalibrates candidate actions using contextual preference scores and produces a more coherent multi-agent behavior.
               </p>
             </div>
           </article>
@@ -211,7 +252,7 @@
     </section>
 
     <section class="section section-tinted" id="results">
-      <div class="page page-wide">
+      <div class="page-wide">
         <div class="section-heading">
           <p class="section-kicker">Main results</p>
           <h2>CRAFT improves closed-loop behavioral rationality.</h2>

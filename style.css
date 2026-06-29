@@ -426,9 +426,14 @@ a {
    ========================================================= */
 
 .method-section {
+  width: auto;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.method-section > .page {
   width: min(1480px, calc(100vw - 72px));
-  margin-right: auto;
-  margin-left: auto;
+  max-width: none;
 }
 
 .method-row {
@@ -503,64 +508,109 @@ a {
 
 
 /* =========================================================
-   Qualitative Rollouts
+   Qualitative Rollouts: Baseline vs CRAFT Comparisons
    ========================================================= */
 
-.video-grid {
+.comparison-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
+  gap: 34px;
 }
 
-.video-card {
+.comparison-card {
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 20px;
+  border-radius: 24px;
   background: #fff;
-  box-shadow: 0 12px 34px rgba(16, 24, 40, 0.05);
+  box-shadow: 0 14px 40px rgba(16, 24, 40, 0.06);
 }
 
-.video-shell {
-  position: relative;
+.comparison-video-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
   background: #0d1117;
 }
 
-.video-shell video {
+.comparison-video {
+  position: relative;
+  min-width: 0;
+  background: #0d1117;
+}
+
+.comparison-video + .comparison-video {
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.comparison-video video {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
+  background: #0d1117;
 }
 
-.video-badge {
+.comparison-label {
   position: absolute;
   top: 14px;
   left: 14px;
   z-index: 2;
-  padding: 6px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  padding: 6px 11px;
   border-radius: 999px;
+
   color: #fff;
-  background: rgba(15, 23, 42, 0.72);
+  background: rgba(15, 23, 42, 0.74);
   backdrop-filter: blur(8px);
-  font-size: 11px;
-  font-weight: 750;
-  letter-spacing: 0.04em;
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-.video-desc {
-  padding: 22px 24px 25px;
+.comparison-ours .comparison-label {
+  background: rgba(37, 99, 235, 0.86);
 }
 
-.video-desc h3 {
+.comparison-desc {
+  padding: 24px 28px 28px;
+}
+
+.comparison-desc h3 {
   margin: 0 0 8px;
-  font-size: 21px;
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
 }
 
-.video-desc p {
+.comparison-desc p {
+  max-width: 900px;
   margin: 0;
   color: var(--muted);
+  font-size: 16px;
+  line-height: 1.7;
 }
+
+
+/* Mobile: stack baseline and CRAFT vertically */
+@media (max-width: 760px) {
+  .comparison-video-row {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-video + .comparison-video {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .comparison-desc {
+    padding: 20px;
+  }
+
+  .comparison-desc h3 {
+    font-size: 21px;
+  }
+}
+
 
 
 /* =========================================================
@@ -895,7 +945,6 @@ a {
     border-top: 1px solid var(--line);
   }
 
-  .overview-grid,
   .takeaway-grid,
   .result-callouts {
     grid-template-columns: 1fr;
@@ -1041,7 +1090,6 @@ a {
     max-height: 320px;
   }
 
-  .video-grid,
   .analysis-pair {
     grid-template-columns: 1fr;
   }
