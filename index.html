@@ -287,33 +287,38 @@
             </div>
           </article>
 
-        <div class="extra-video-grid" aria-label="Additional rollout videos">
-          <article class="extra-video-card extra-video-open-loop">
-            <div class="extra-video-label">Open-loop Eval.</div>
-            <video autoplay muted loop playsinline controls preload="metadata" poster="assets/open_loop_1_poster.jpg">
-              <source src="Open_loop_evaluation/collision risk_crop.mp4" type="video/mp4" />
-            </video>
-          </article>
+        <!-- Scenario 5 -->
+          <article class="comparison-card comparison-card-open-loop">
+            <div class="comparison-video-row">
+              <div class="comparison-video comparison-open-loop">
+                <div class="comparison-label">Open-loop Eval.</div>
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/open_loop_1_poster.jpg">
+                  <source src="Open_loop_evaluation/collision risk_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
 
-          <article class="extra-video-card extra-video-open-loop">
-            <div class="extra-video-label">Open-loop Eval.</div>
-            <video autoplay muted loop playsinline controls preload="metadata" poster="assets/open_loop_2_poster.jpg">
-              <source src="Open_loop_evaluation/rule violation_crop.mp4" type="video/mp4" />
-            </video>
-          </article>
+              <div class="comparison-video comparison-open-loop">
+                <div class="comparison-label">Open-loop Eval.</div>
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/open_loop_2_poster.jpg">
+                  <source src="Open_loop_evaluation/rule violation_crop.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
 
-          <article class="extra-video-card">
-            <video autoplay muted loop playsinline controls preload="metadata" poster="assets/craft_sim_1_poster.jpg">
-              <source src="assets/Stability under Extreme Geometric Topologies_ours_crop.mp4" type="video/mp4" />
-            </video>
+            <div class="comparison-desc">
+              <h3>Open-loop contextual preference evaluation</h3>
+              <p>
+                CPE estimates agent-time preference scores for generated behaviors
+                under the complete simulated scene. In this visualization,
+                <span class="score-word score-green">green</span> indicates a high preference
+                score close to 1,
+                <span class="score-word score-red">red</span> indicates a low preference
+                score close to 0, and
+                <span class="score-word score-yellow">yellow</span> indicates an intermediate
+                score around 0.5, with colors gradually transitioning from green to red.
+              </p>
+            </div>
           </article>
-
-          <article class="extra-video-card">
-            <video autoplay muted loop playsinline controls preload="metadata" poster="assets/craft_sim_2_poster.jpg">
-              <source src="assets/Logical Compliance_ours_crop.mp4" type="video/mp4" />
-            </video>
-          </article>
-        </div>
 
       </div>
     </section>

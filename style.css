@@ -1246,4 +1246,40 @@ a {
     border-radius: 16px;
   }
 }
+.score-word,
+.score-legend span {
+  font-weight: 800;
+}
 
+.score-green {
+  color: #16a34a;
+}
+
+.score-yellow {
+  color: #ca8a04;
+}
+
+.score-red {
+  color: #dc2626;
+}
+
+.score-legend {
+  display: flex;
+  max-width: 460px;
+  margin-top: 14px;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.score-gradient {
+  flex: 1;
+  height: 9px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #16a34a 0%, #facc15 50%, #dc2626 100%);
+}
+.comparison-card-open-loop .comparison-desc p {
+  max-width: 1500px;
+}
