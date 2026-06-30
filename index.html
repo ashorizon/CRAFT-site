@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
     name="description"
-    content="CRAFT: Contextual Reference Alignment Framework for closed-loop traffic simulation."
+    content="CRAFT: Contextual pReference Alignment Framework for Traffic Simulation."
   />
   <title>CRAFT — Bridging Local Observation and Global Simulation</title>
   <link rel="stylesheet" href="style.css" />
@@ -49,12 +49,16 @@
         <p class="affiliation">
           <sup>1</sup>Beihang University ·
           <sup>2</sup>The University of Hong Kong ·
-          <sup>*</sup>Equal contribution
+          <sup>*</sup>Equal contribution ·
+          <sup>†</sup>Corresponding author
         </p>
 
         <p class="hero-claim">
-          <strong>CRAFT turns context-induced simulation failures into test-time guidance,</strong>
-          improving realism, safety, and rule compliance without retraining the base simulator.
+          <strong>
+            CRAFT, a Contextual pReference Alignment Framework for Traffic Simulation,
+          </strong>
+          bridges this local-to-global mismatch via self-supervised failure discovery
+          and preference-guided test-time alignment.
         </p>
 
         <div class="hero-actions">
@@ -94,7 +98,7 @@
       <div class="section-heading section-heading-center">
         <p class="eyebrow">Overview</p>
         <h2>
-          Closed-loop simulation exposes global context that ego-centric logs cannot fully capture.
+          Can policies learned from locally observed driving logs remain behaviorally rational when executed in globally contextualized closed-loop simulation?
         </h2>
         <p class="section-summary">
           Autoregressive traffic simulators learn from ego-centric driving logs, where surrounding context can be incomplete due to perception limits and occlusions. When these models are rolled out in globally observable simulation, incomplete context-action associations can lead to abnormal stops, unsafe interactions, and rule violations.
@@ -112,59 +116,30 @@
       </figure>
     </section>
 
-    <section class="section" id="summary">
-      <div class="page">
-        <div class="section-heading section-heading-center">
-          <p class="section-kicker">Contributions</p>
-          <h2>
-            From incomplete log imitation to complete-context preference alignment.
-          </h2>
-        </div>
-
-        <div class="takeaway-grid">
-          <article>
-            <h3>Local-to-global mismatch</h3>
-            <p>
-              Ego-centric logs can create incomplete context–action associations that
-              degrade behavioral rationality in globally observable closed-loop rollouts.
-            </p>
-          </article>
-
-          <article>
-            <h3>Complete-context preference learning</h3>
-            <p>
-              Grouped what-if rollouts expose simulator-induced failures and provide
-              token-level, intra-trajectory, and inter-rollout supervision for CPE.
-            </p>
-          </article>
-
-          <article>
-            <h3>Preference-guided decoding</h3>
-            <p>
-              CPE evaluates one-step lookahead scenes and recalibrates candidate
-              probabilities toward globally coherent behavior before execution.
-            </p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-
    <section id="method" class="section method-section">
       <div class="section-heading section-heading-center">
         <p class="eyebrow">Method</p>
         <h2>CRAFT turns simulator-induced failures into preference guidance.</h2>
         <p class="section-summary">
-          CRAFT first learns a Contextual Preference Evaluator from complete-context what-if rollouts, then uses it during inference to reweight candidate actions before they are executed.
+          CRAFT treats the simulator itself as a globally observable sandbox. Starting
+          from logged initial states, the base simulator generates diverse what-if
+          rollouts that self-expose failure modes induced by incomplete observational
+          context. These failures are grounded with human-aligned driving priors and
+          converted into preference supervision for a
+          <strong>Contextual Preference Evaluator (CPE)</strong>, which assesses the
+          rationality of generated behaviors under complete scene context.
         </p>
       </div>
 
       <div class="method-row">
         <div class="method-copy">
           <p class="method-label">Training</p>
-          <h3>Learn complete-context preferences from what-if rollouts.</h3>
+          <h3>Construct grouped complete-context what-if rollouts.</h3>
           <p>
-            A frozen autoregressive simulator generates diverse rollouts from the same logged initial scene. These grouped futures expose simulator-induced failures, which are converted into dense preference supervision for CPE.
+            The base simulator performs stochastic rollouts with diverse random seeds from
+            the same logged initial scene. The resulting preference dataset is organized
+            as grouped alternative futures, supporting token-level supervision and
+            inter-rollout preference learning.
           </p>
         </div>
 
@@ -179,9 +154,11 @@
       <div class="method-row method-row-reverse">
         <div class="method-copy">
           <p class="method-label">Inference</p>
-          <h3>Calibrate candidate actions before execution.</h3>
+          <h3>Reweight autoregressive decoding before action execution.</h3>
           <p>
-            At each simulation step, CPE scores one-step lookahead scenes induced by candidate actions and reweights the simulator distribution toward globally coherent behavior.
+            At each simulation step, CPE evaluates next-step candidates through one-step
+            lookahead scenes and calibrates the simulator's next-token distribution before
+            action execution.
           </p>
         </div>
 
@@ -211,14 +188,14 @@
             <div class="comparison-video-row">
               <div class="comparison-video comparison-baseline">
                 <div class="comparison-label">Baseline</div>
-                <video controls preload="metadata" poster="assets/rule_baseline_poster.jpg">
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/rule_baseline_poster.jpg">
                   <source src="assets/Logical Compliance_catk2_crop.mp4" type="video/mp4" />
                 </video>
               </div>
 
               <div class="comparison-video comparison-ours">
                 <div class="comparison-label">CRAFT</div>
-                <video controls preload="metadata" poster="assets/rule_craft_poster.jpg">
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/rule_craft_poster.jpg">
                   <source src="assets/Logical Compliance_ours2_crop.mp4" type="video/mp4" />
                 </video>
               </div>
@@ -237,14 +214,14 @@
             <div class="comparison-video-row">
               <div class="comparison-video comparison-baseline">
                 <div class="comparison-label">Baseline</div>
-                <video controls preload="metadata" poster="assets/stop_baseline_poster.jpg">
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/stop_baseline_poster.jpg">
                   <source src="assets/Behavioral Stability_catk_crop.mp4" type="video/mp4" />
                 </video>
               </div>
 
               <div class="comparison-video comparison-ours">
                 <div class="comparison-label">CRAFT</div>
-                <video controls preload="metadata" poster="assets/stop_craft_poster.jpg">
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/stop_craft_poster.jpg">
                   <source src="assets/Behavioral Stability_ours_crop.mp4" type="video/mp4" />
                 </video>
               </div>
@@ -263,14 +240,14 @@
             <div class="comparison-video-row">
               <div class="comparison-video comparison-baseline">
                 <div class="comparison-label">Baseline</div>
-                <video controls preload="metadata" poster="assets/interaction_baseline_poster.jpg">
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/interaction_baseline_poster.jpg">
                   <source src="assets/Safety-critical Interaction_catk_crop.mp4" type="video/mp4" />
                 </video>
               </div>
 
               <div class="comparison-video comparison-ours">
                 <div class="comparison-label">CRAFT</div>
-                <video controls preload="metadata" poster="assets/interaction_craft_poster.jpg">
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/interaction_craft_poster.jpg">
                   <source src="assets/Safety-critical Interaction_ours_crop.mp4" type="video/mp4" />
                 </video>
               </div>
@@ -289,14 +266,14 @@
             <div class="comparison-video-row">
               <div class="comparison-video comparison-baseline">
                 <div class="comparison-label">Baseline</div>
-                <video controls preload="metadata" poster="assets/interaction_baseline_poster.jpg">
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/interaction_baseline_poster.jpg">
                   <source src="assets/Self-recovery under Initial Perturbations_catk_crop.mp4" type="video/mp4" />
                 </video>
               </div>
 
               <div class="comparison-video comparison-ours">
                 <div class="comparison-label">CRAFT</div>
-                <video controls preload="metadata" poster="assets/interaction_craft_poster.jpg">
+                <video autoplay muted loop playsinline controls preload="metadata" poster="assets/interaction_craft_poster.jpg">
                   <source src="assets/Self-recovery under Initial Perturbations_ours_crop.mp4" type="video/mp4" />
                 </video>
               </div>
@@ -310,33 +287,34 @@
             </div>
           </article>
 
-          <div class="extra-video-grid">
-            <article class="extra-video-card">
-              <video controls preload="metadata" poster="assets/open_loop_1_poster.jpg">
-                <source src="Open_loop_evaluation\collision risk.mp4" type="video/mp4" />
-              </video>
-            </article>
+        <div class="extra-video-grid" aria-label="Additional rollout videos">
+          <article class="extra-video-card extra-video-open-loop">
+            <div class="extra-video-label">Open-loop Eval.</div>
+            <video autoplay muted loop playsinline controls preload="metadata" poster="assets/open_loop_1_poster.jpg">
+              <source src="Open_loop_evaluation/collision risk_crop.mp4" type="video/mp4" />
+            </video>
+          </article>
 
-            <article class="extra-video-card">
-              <video controls preload="metadata" poster="assets/open_loop_2_poster.jpg">
-                <source src="Open_loop_evaluation\rule violation.mp4" type="video/mp4" />
-              </video>
-            </article>
+          <article class="extra-video-card extra-video-open-loop">
+            <div class="extra-video-label">Open-loop Eval.</div>
+            <video autoplay muted loop playsinline controls preload="metadata" poster="assets/open_loop_2_poster.jpg">
+              <source src="Open_loop_evaluation/rule violation_crop.mp4" type="video/mp4" />
+            </video>
+          </article>
 
-            <article class="extra-video-card">
-              <video controls preload="metadata" poster="assets/craft_sim_1_poster.jpg">
-                <source src="assets\Stability under Extreme Geometric Topologies_ours_crop.mp4" type="video/mp4" />
-              </video>
-            </article>
+          <article class="extra-video-card">
+            <video autoplay muted loop playsinline controls preload="metadata" poster="assets/craft_sim_1_poster.jpg">
+              <source src="assets/Stability under Extreme Geometric Topologies_ours_crop.mp4" type="video/mp4" />
+            </video>
+          </article>
 
-            <article class="extra-video-card">
-              <video controls preload="metadata" poster="assets/craft_sim_2_poster.jpg">
-                <source src="assets\Logical Compliance_ours_crop.mp4" type="video/mp4" />
-              </video>
-            </article>
-          </div>
-
+          <article class="extra-video-card">
+            <video autoplay muted loop playsinline controls preload="metadata" poster="assets/craft_sim_2_poster.jpg">
+              <source src="assets/Logical Compliance_ours_crop.mp4" type="video/mp4" />
+            </video>
+          </article>
         </div>
+
       </div>
     </section>
 
@@ -346,10 +324,11 @@
           <p class="section-kicker">Main results</p>
           <h2>CRAFT improves closed-loop behavioral rationality.</h2>
           <p class="section-lead">
-            Under all-agent behavioral metrics, CRAFT substantially reduces collisions,
-            offroad events, and traffic-rule violations while maintaining competitive
-            distributional realism. The mild increase in nearest-agent distance JSD is
-            consistent with CRAFT favoring safer inter-agent spacing.
+            CRAFT improves closed-loop behavioral rationality while maintaining competitive
+            distributional realism. CPE functions as a plug-in alignment module for
+            different simulators, amortizing human-aligned criteria into dense contextual
+            preference scores and enabling more stable probability calibration during
+            decoding.
           </p>
         </div>
 
@@ -506,6 +485,7 @@
             <span>38.80 → 25.90 &nbsp; (33.2% reduction)</span>
           </article>
         </div>
+        </div>
     </section>
 
     <section class="section" id="analysis">
@@ -513,12 +493,13 @@
         <div class="section-heading">
           <p class="section-kicker">Test-time alignment analysis</p>
           <h2>
-            CPE warns before failures emerge and reduces long-horizon error accumulation.
+            CPE identifies risky action distributions before failures materialize and
+            mitigates long-horizon error accumulation.
           </h2>
           <p class="section-lead">
-            Dense preference scores reveal risky action distributions before explicit
-            violations occur, allowing CRAFT to recalibrate the next-token distribution
-            before the action is executed.
+            This proactive signal enables test-time correction before execution, whereas
+            rule-based evaluators usually react only after explicit violations have
+            occurred.
           </p>
         </div>
 
@@ -574,6 +555,44 @@
             alt="Relative performance under different preference-data sizes, guidance scales, and candidate-pool sizes"
           />
         </figure>
+      </div>
+    </section>
+
+    <section class="section" id="summary">
+      <div class="page">
+        <div class="section-heading section-heading-center">
+          <p class="section-kicker">Contributions</p>
+          <h2>
+            From incomplete log imitation to complete-context preference alignment.
+          </h2>
+        </div>
+
+        <div class="takeaway-grid">
+          <article>
+            <h3>Local-to-global mismatch</h3>
+            <p>
+              Imitation learning on ego-centric logs leads to incomplete context-action
+              associations that degrade closed-loop behavior.
+            </p>
+          </article>
+
+          <article>
+            <h3>Contextual Preference Evaluator</h3>
+            <p>
+              CPE learns complete-context behavioral preferences from simulator-induced
+              failures grounded by human-aligned driving priors.
+            </p>
+          </article>
+
+          <article>
+            <h3>Plug-in test-time guidance</h3>
+            <p>
+              CPE is deployed as a plug-in test-time guidance module for autoregressive
+              decoding, improving behavioral rationality while preserving competitive
+              realism.
+            </p>
+          </article>
+        </div>
       </div>
     </section>
 

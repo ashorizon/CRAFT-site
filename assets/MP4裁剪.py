@@ -148,10 +148,10 @@ def select_crop_rect_from_video(input_path, frame_index=None, display_scale=0.2)
 if __name__ == "__main__":
 
     crop_mp4_to_mp4_h264(
-        "assets\Safety-critical Interaction_ours.mp4",
-        "assets\Safety-critical Interaction_ours_crop.mp4",
+        "Open_loop_evaluation\collision risk.mp4",
+        "Open_loop_evaluation\collision risk_crop.mp4",
         fps=None,  # None 表示使用原视频帧率
-        crop_rect=(460, 1120, 2780, 1390),
+        crop_rect=(450, 1160, 2640, 1315),#(450, 1160, 2640, 1315),(460, 1120, 2780, 1390)
         zoom_factor=1.0
     )
-    #crop_rect = select_crop_rect_from_video("assets\Behavioral Stability_ours.mp4")
+    #crop_rect = select_crop_rect_from_video("Open_loop_evaluation/rule violation.mp4")
